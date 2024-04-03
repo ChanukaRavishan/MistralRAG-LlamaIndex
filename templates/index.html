@@ -1,1 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Customgpt</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            background-color: #111;
+            color: #fff;
+        }
+        .header {
+            background-color: #111;
+            padding: 20px 0;
+            text-align: center;
+            color: #FF5733; /* Reddish-orange color */
+        }
+        .header h1 {
+            margin: 0;
+            font-size: 24px;
+        }
+        .container {
+            max-width: 800px;
+            margin: auto;
+            padding: 20px;
+        }
+        .chat-box {
+            border: 1px solid #555;
+            border-radius: 5px;
+            padding: 10px;
+            margin: auto;
+            overflow-y: scroll;
+            max-height: 300px;
+        }
+        .message {
+            background-color: #333;
+            border-radius: 5px;
+            padding: 5px 10px;
+            margin-bottom: 5px;
+        }
+        .user-message {
+            background-color: #444;
+            align-self: flex-end;
+        }
+        .bot-message {
+            background-color: #555;
+            align-self: flex-start;
+        }
+        .input-group {
+            display: flex;
+            justify-content: center;
+            margin-top: 20px;
+        }
+        .input-group input[type="text"] {
+            flex: 1;
+            padding: 10px;
+            border-radius: 5px 0 0 5px;
+            border: 1px solid #555;
+            border-right: none;
+        }
+        .input-group button {
+            padding: 10px 20px;
+            border-radius: 0 5px 5px 0;
+            border: 1px solid #555;
+            background-color: #FF5733; /* Reddish-orange color */
+            color: white;
+            cursor: pointer;
+        }
+        .footer {
+            text-align: center;
+            margin-top: 20px;
+            color: #888;
+            font-size: 14px;
+        }
+        .footer a {
+            color: #888;
+            text-decoration: none;
+        }
+        .footer a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>Customgpt</h1>
+    </div>
+
+    <div class="container">
+        <div id="welcome-text">
+            <p> How can I help you today?</p>
+        </div>
+
+        <div class="chat-box" id="chat-box"></div>
+        <div class="input-group">
+            <input type="text" id="message-input" placeholder="Ask me anything about the custom dataset.....">
+            <button onclick="sendMessage()">Send</button>
+        </div>
+    </div>
+
+     <div class="footer">
+        Powered by: ...team. <a href="https://github.com/ChanukaRavishan" target="_blank">Visit us: https://github.com/ChanukaRavishan!</a>
+    </div>
+
+    <script>
+        function sendMessage() {
+            var messageInput = document.getElementById('message-input');
+            var message = messageInput.value.trim();
+            if (message !== '') {
+                addMessage('user', message);
+                messageInput.value = '';
+                // Send message to server
+                fetch('/query?message=' + encodeURIComponent(message))
+                    .then(response => response.json())
+                    .then(data => {
+                        var botResponse = data.response;
+                        addMessage('bot', botResponse);
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+                    });
+            }
+        }
+
+        function addMessage(sender, message) {
+            var chatBox = document.getElementById('chat-box');
+            var messageClass = sender === 'user' ? 'user-message' : 'bot-message';
+            var messageElement = document.createElement('div');
+            messageElement.classList.add('message', messageClass);
+            messageElement.textContent = message;
+            chatBox.appendChild(messageElement);
+            // Scroll to bottom
+            chatBox.scrollTop = chatBox.scrollHeight;
+            // Scroll welcome text up
+            document.getElementById('welcome-text').scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+    </script>
+</body>
+</html>
 
