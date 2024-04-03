@@ -12,7 +12,7 @@ def initialize_llm():
     os.environ["FORCE_CMAKE"] = "1"
     
     llm = LlamaCPP(
-        model_path="/home/manifold/Desktop/DAP/LIRNEgpt/llama_index/models/mistral-7b-instruct-v0.2.Q4_K_M.gguf",
+        model_path="<replace the path to the downloaded mistral model>/llama_index/models/mistral-7b-instruct-v0.2.Q4_K_M.gguf",
         temperature=0.1,
         max_new_tokens=256,
         context_window=4096,
