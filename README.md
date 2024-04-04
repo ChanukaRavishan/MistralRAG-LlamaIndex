@@ -2,6 +2,19 @@
 
 This repository contains a complete implementation of Retrieval Augmented Generation (RAG) using Mistral-7B-Instruct-v0.1 for generating responses from a custom dataset. The main file `app.py` sets up a Flask web server to provide an interface for querying the RAG model.
 
+This implementation is done in two key phases: **indexing** and **retrieval & generation**. First, during indexing, documents are split into text chunks, and their embeddings are stored in a vector database. Then, in the retrieval & generation phase, user queries are matched against these embeddings, prompting the LLM to generate responses based on the retrieved contexts.
+
+Why Mistral-7B?, Mistral-7B, especially in its 4-bit quantized version, offers impressive performance while being efficient in memory usage ( other open-source LLMs such as Llama2, Mindy-7B, MoMo-70B, etc can also be utilized). Here ‘Mistral-7B-Instruct-v0.2-Q4_K_M.gguf’ is used for the efficient retrieval and generation tasks.
+
+The stack includes the LlamaIndex framework, which provides SentenceWindowNodeParser, VectorStoreIndex, ServiceContext, and SentenceTransformerRerank for powerful, breeze querying, and accessing domain-specific data, outperforming alternatives like Langchain.
+
+Instead of fine-tuning an LLM model, the embedding-based retrieval ensures scalability and avoids issues like model drift, cost, and complexity.
+
+How to assess the RAG system? Check out the evaluation process and benchmarks in detail [here](https://qdrant.tech/documentation/tutorials/retrieval-quality/). It offers further insights into the methodology and performance metrics.
+
+(Note: A system with at least 12 GB GPU and 16 GB RAM is recommended for optimal performance.)
+
+
 ## Setup
 
 Set up the environment and install the necessary dependencies. You can do this using the following steps:
@@ -9,13 +22,13 @@ Set up the environment and install the necessary dependencies. You can do this u
 1. Clone this repository to your local machine:
 
    ```bash
-   git clone <repository_url>
+   git clone https://github.com/ChanukaRavishan/MistralRAG-LlamaIndex.git
    ```
 
 2. Navigate to the repository directory:
 
    ```bash
-   cd <repository_directory>
+   cd MistralRAG-LlamaIndex
    ```
 
 3. Install the required Python packages. You may use a virtual environment to manage dependencies:
@@ -25,6 +38,13 @@ Set up the environment and install the necessary dependencies. You can do this u
    ```
 
 ## Usage
+
+### 1. Creating the vector dataset
+
+To create a vector storage follow the instructions in the file: 'LLaMaCPP_python_creating_vector_storage.ipynb'
+Here, I'm using huggingface 'bge-small-en-v1.5 model' for the embedding generation and store the embeddings in the VectorStoreIndex provided by LlamaIndex. 
+
+### 2. Starting the web sever
 
 To start the Flask web server and interact with the RAG model, run the following command:
 
